@@ -17,41 +17,36 @@ public class GameOfLifeClass implements ActionListener{
 	private Thread gamePlay;
 	private JButton startButton,stopButton,resetButton;
 	private Board board;
-	public static void main(String[] args) {
-		
-					GameOfLifeClass window = new GameOfLifeClass();
-					window.frame.setVisible(true);
-
-			}
-		
-	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args)
+	{		
+		GameOfLifeClass window = new GameOfLifeClass();
+		window.frame.setVisible(true);
+	}
 
 	/**
 	 * Create the application.
 	 */
-	public GameOfLifeClass() {
+	public GameOfLifeClass()
+	{
 		initialize();
 	}
-
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	public void initialize() {
-		//System.out.println(cells[50][50]);
+	public void initialize()
+	{
 		frame = new JFrame();
 		frame.setTitle("Game Of Life");
 		frame.setSize(1286,829);
 		frame.setVisible(true);
 		frame.setResizable(false);
-		//frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		board=new Board();
 		frame.setContentPane(board);
-		//frame.getContentPane().setBackground(Color.gray);
-		//Move move=new Move();
-		//frame.addMouseMotionListener(this);
-		//Click click=new Click();
-		//frame.addMouseListener(this);
 		startButton = new JButton("Start");
 		startButton.addActionListener(this);
 		stopButton = new JButton("Stop");
@@ -63,80 +58,89 @@ public class GameOfLifeClass implements ActionListener{
 		frame.add(resetButton);
 	}
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		if (e.getSource().equals(resetButton)) {
-			gameReset();
-		}
+	//Listens for any event triggered by the buttons.
+	public void actionPerformed(ActionEvent e) 
+	{
+		if (e.getSource().equals(resetButton)) 
+			gameReset();		
 		else if(e.getSource().equals(startButton))
 		{
 	   gamePlay=new Thread(board);
 	   gamePlay.start();
-	   
 	    }
 		else
-		{
 			gamePlay.interrupt();
-		}
 	}
-
+	//Function for resetting the grid 
+		public void gameReset()
+		{
+			cells=new int[116][78];
+			frame.repaint();
+		}
+		
+	/**
+	 * Initialize JPanel Class to listen to Mouse event and update the grid with the surviving cells.
+	 */
 	public int space=1;
 	public int mx=-100;
 	public int my=-100;
 	public class Board extends JPanel implements MouseMotionListener,MouseListener,Runnable{
 
-		public Board() {
+		public Board() 
+		{
             addMouseListener(this);
             addMouseMotionListener(this);
         }
 		
-		public void paintComponent(Graphics g) {
-
+		public void paintComponent(Graphics g) 
+		{
+			//Fills cell with red if the cell is alive
 			for(int i=5;i<=115;i++)
 			{
 				for(int j=5;j<=77;j++)
-				{if(cells[i][j]==1)
-					{g.setColor(Color.red);
-                      g.fillRect((10*i+10),(10*j+10), 10, 10);
+				{
+					if(cells[i][j]==1)
+					{
+						g.setColor(Color.red);
+                        g.fillRect((10*i+10),(10*j+10), 10, 10);
 					}
+
 				}
 			}
-
+      // Painting the Grid
             g.setColor(Color.BLACK);
-            for (int i=5; i<=115; i++) {
+            for (int i=5; i<=115; i++) 
                 g.drawLine(((i*10)+10), 60, (i*10)+10, 10 + (10*75));
-            }
-            for (int i=5; i<=75; i++) {
-                g.drawLine(60, ((i*10)+10), 10*(115+1), ((i*10)+10));
-            }
             
-        }
+            for (int i=5; i<=75; i++) 
+                g.drawLine(60, ((i*10)+10), 10*(115+1), ((i*10)+10));
+            
+         }
+		//run() function is automatically called whenever a thread starts.
 		public void run() {
-			// TODO Auto-generated method stub
-			 int count,x,y,x1,y1;
+			 int count,x,y;
 				 int [][]b=new int[116][78];
 				 for( x=5; x<115 ; x++)
-				  {
-				   count =  0;
+				  {		   
 				   for( y=5; y<75 ; y++)
 				   {
-					count =0;
+					  count =  0;
 				    if(cells[x+1][y] == 1 && (x+1)<115) // next element in the row
-				    	count++;
+				     count++;
 				    if(cells[x-1][y] == 1 && (x-1)>5) // previous element in row
-				    	count++;
+				     count++;
 				    if(cells[x][y+1] == 1 && (y+1)<75) // element above it
-				    	count++;
+				     count++;
 				    if(cells[x][y-1] == 1 && (y-1)>5) // element below it
-				    	count++;
+				     count++;
 				    if(cells[x+1][y+1] == 1 && (x+1)<115 && (y+1)<75) // element to bottom right
-				    	count++;
+				     count++;
 				    if(cells[x+1][y-1] == 1 && (x+1)<115 && (y+1)>5) // element to bottom left
-				    	count++;
+				     count++;
 				    if(cells[x-1][y+1] == 1 && (x-1)>5 && (y+1)<115) // element top right 
-				    	count++;
+				     count++;
 				    if(cells[x-1][y-1] == 1 && (x-1)>5 && (y-1)>5) // element top left
-				    	count++;
+				     count++; 
 				    if(cells[x][y] == 1)
 				     {
 				    	if(count>=4) // over population death			
@@ -151,77 +155,62 @@ public class GameOfLifeClass implements ActionListener{
 				    		b[x][y]=1;
 				    else
 				     b[x][y]=0;
+				    }
+				   }
+
 				 gameReset();
 			     cells=b;
 				frame.repaint();
 				 try {
-		                Thread.sleep(1000);
+		                Thread.sleep(1000/5);//Adds a delay to the game for better visualization of the simulation
 		                run();
-		            } catch (InterruptedException ex) {}
+		            } 
+				 catch (InterruptedException ex) {}
 		}
 		public void mouseClicked(MouseEvent e) {
-//	    mx=e.getX()/10-1;
-//			my=e.getY()/10-1;
-//			System.out.println(mx+" "+my);
-//			
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
+		public void mouseReleased(MouseEvent e) 
+		{
 			mx=e.getX()/10-1;
 			my=e.getY()/10-1;
-			
-			/*if(pointArr.contains(new Point(mx,my)))
-				pointArr.remove(new Point(mx,my));
-			else*/
 			cells[mx][my]=1;
 			frame.repaint();
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
+			
 			
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
-		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
+		public void mouseDragged(MouseEvent e) 
+		{
 			mx=e.getX()/10-1;
 			my=e.getY()/10-1;
-			//System.out.println(mx+" "+my);
-			/*if(pointArr.contains(new Point(mx,my)))
-				pointArr.remove(new Point(mx,my));
-			else*/
 			cells[mx][my]=1;
 			frame.repaint();
 		}
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			// TODO Auto-generated method stub
 			
 		}	
 		
 	}
-	public void gameReset()
-	{
-		cells=new int[116][78];
-		frame.repaint();
-	}
+	
 
 	
 }
