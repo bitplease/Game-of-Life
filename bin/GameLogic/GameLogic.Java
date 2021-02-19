@@ -1,28 +1,28 @@
-static int[] Live_Die(int a[700][700])
-{
- int count,x,y,b[700][700];
- for( x=0; x<700 ; x++)
+ static int[] Live_Die(int a[700][700])
+ {
+  int count,x,y,b[700][700];
+  for( x=0; x<700 ; x++)
   {
    count =  0;
    for( y=0; y<700 ; y++)
    {
-    if(a[x+1][y] == 1) // next element in the row
+    if(a[x+1][y] == 1 && (x+1)<700) // next element in the row
      count++;
-    if(a[x-1][y] == 1) // previous element in row
+    if(a[x-1][y] == 1 && (x-1)>=0) // previous element in row
      count++;
-    if(a[x][y+1] == 1) // element above it
+    if(a[x][y+1] == 1 && (y+1)<700) // element above it
      count++;
-    if(a[x][y-1] == 1) // element below it
+    if(a[x][y-1] == 1 && (y-1)>=0) // element below it
      count++;
-    if(a[x+1][y+1] == 1) // element to bottom right
+    if(a[x+1][y+1] == 1 && (x+1)<700 && (y+1)<700) // element to bottom right
      count++;
-    if(a[x+1][y-1] == 1) // element to bottom left
+    if(a[x+1][y-1] == 1 && (x+1)<700 && (y-1)>=0) // element to bottom left
      count++;
-    if(a[x-1][y+1] == 1) // element top right 
+    if(a[x-1][y+1] == 1 && (y+1)<700 && (x-1)>=0) // element top right 
      count++;
-    if(a[x-1][y-1] == 1) // element top left
+    if(a[x-1][y-1] == 1 && (y-1)>=0 && (x-1)>=0) // element top left
      count++; 
-    else if(count> 3 && a[x][y] == 1) // over population death
+    if(count> 3 && a[x][y] == 1) // over population death
      b[x][y]=0;
     else if( count<4 && count>1 && a[x][y]== 1) // remains alive
      b[x][y]=1;
@@ -34,5 +34,5 @@ static int[] Live_Die(int a[700][700])
      b[x][y]=0;
     }
    }
- return b;
-}
+  return b;
+ }
