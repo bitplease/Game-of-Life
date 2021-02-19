@@ -112,7 +112,7 @@ public class GameOfLifeClass implements ActionListener{
             for (int i=5; i<=115; i++) 
                 g.drawLine(((i*10)+10), 60, (i*10)+10, 10 + (10*75));
             
-            for (int i=5; i<=77; i++) 
+            for (int i=5; i<=75; i++) 
                 g.drawLine(60, ((i*10)+10), 10*(115+1), ((i*10)+10));
             
          }
@@ -120,24 +120,24 @@ public class GameOfLifeClass implements ActionListener{
 		public void run() {
 			 int count,x,y;
 				 int [][]b=new int[116][78];
-				 for( x=5; x<116 ; x++)
+				 for( x=5; x<115 ; x++)
 				  {		   
-				   for( y=5; y<78 ; y++)
+				   for( y=5; y<75 ; y++)
 				   {
 					  count =  0;
-				    if(cells[x+1][y] == 1 && (x+1)<116) // next element in the row
+				    if(cells[x+1][y] == 1 && (x+1)<115) // next element in the row
 				     count++;
 				    if(cells[x-1][y] == 1 && (x-1)>5) // previous element in row
 				     count++;
-				    if(cells[x][y+1] == 1 && (y+1)<78) // element above it
+				    if(cells[x][y+1] == 1 && (y+1)<75) // element above it
 				     count++;
 				    if(cells[x][y-1] == 1 && (y-1)>5) // element below it
 				     count++;
-				    if(cells[x+1][y+1] == 1 && (x+1)<116 && (y+1)<78) // element to bottom right
+				    if(cells[x+1][y+1] == 1 && (x+1)<115 && (y+1)<75) // element to bottom right
 				     count++;
-				    if(cells[x+1][y-1] == 1 && (x+1)<116 && (y+1)>5) // element to bottom left
+				    if(cells[x+1][y-1] == 1 && (x+1)<115 && (y+1)>5) // element to bottom left
 				     count++;
-				    if(cells[x-1][y+1] == 1 && (x-1)>5 && (y+1)<116) // element top right 
+				    if(cells[x-1][y+1] == 1 && (x-1)>5 && (y+1)<115) // element top right 
 				     count++;
 				    if(cells[x-1][y-1] == 1 && (x-1)>5 && (y-1)>5) // element top left
 				     count++; 
@@ -168,6 +168,11 @@ public class GameOfLifeClass implements ActionListener{
 				 catch (InterruptedException ex) {}
 		}
 		public void mouseClicked(MouseEvent e) {
+			mx=e.getX()/10-1;
+			my=e.getY()/10-1;
+			if(cells[mx][my]==1)
+				cells[mx][my]=0;
+			frame.repaint();
 		}
 
 		@Override
@@ -180,7 +185,6 @@ public class GameOfLifeClass implements ActionListener{
 		{
 			mx=e.getX()/10-1;
 			my=e.getY()/10-1;
-			cells[mx][my]=1;
 			frame.repaint();
 		}
 
