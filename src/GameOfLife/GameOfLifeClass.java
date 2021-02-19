@@ -6,7 +6,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 
@@ -211,10 +210,6 @@ public class GameOfLifeClass implements ActionListener{
 		@Override
 		public void mouseMoved(MouseEvent e) {
 			
-		}	
-		
-	}
-	
-
-	
+		}			
+	}	
 }
